@@ -1174,6 +1174,10 @@ class SummaPreProcessor:
         # Sort shapefile based on forcing HRU order
         shp = shp.set_index(self.config.get('CATCHMENT_SHP_HRUID'))
         shp.index = shp.index.astype(int)
+        
+        self.logger.info(f"Shapefile index type: {shp.index}")
+        self.logger.info(f"First few forcing_hruIds: {forcing_hruIds[:5]}")
+        
         shp = shp.loc[forcing_hruIds].reset_index()
 
         # Get number of GRUs and HRUs

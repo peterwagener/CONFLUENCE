@@ -664,11 +664,15 @@ class DomainDiscretizer:
             
         else:
             gru_shapefile = self._get_file_path("RIVER_BASINS_PATH", "shapefiles/river_basins", self.config.get('RIVER_BASINS_NAME'))
+            #print(gru_shapefile)
         
         hru_output_shapefile = self._get_file_path("CATCHMENT_PATH", "shapefiles/catchment", f"{self.domain_name}_HRUs_GRUs.shp")
 
+        print(gru_shapefile)
+        
         gru_gdf = self._read_shapefile(gru_shapefile)
-        gru_gdf['HRU_ID'] = range(1, len(gru_gdf) + 1)
+        gru_gdf['HRU_ID'] = range(0, len(gru_gdf))
+        print(len(gru_gdf))
         gru_gdf['hru_type'] = 'GRU'
 
         # Calculate mean elevation for each HRU with proper CRS handling
@@ -742,13 +746,28 @@ class DomainDiscretizer:
                 gru_gdf['center_lat'] = 0.0
                 gru_gdf['center_lon'] = 0.0
         
-        if 'COMID' in gru_gdf.columns:
-            gru_gdf['GRU_ID'] = gru_gdf['COMID']
+        if 'LINKNO' in gru_gdf.columns:
+            gru_gdf['GRU_ID'] = gru_gdf['LINKNO']
         elif 'fid' in gru_gdf.columns:
             gru_gdf['GRU_ID'] = gru_gdf['fid']
-
+        
+        # Calculate area if 'GRU_area' is missing
+        if 'GRU_area' not in gru_gdf.columns:
+            self.logger.warning("'GRU_area' column missing from GRU shapefile — calculating it from geometry.")
+            # Ensure the CRS is projected for accurate area calculation
+            if gru_gdf.crs.is_geographic:
+                self.logger.info("Reprojecting GRUs to UTM for area calculation.")
+                projected_crs = gru_gdf.estimate_utm_crs()
+                gru_gdf = gru_gdf.to_crs(projected_crs)
+            gru_gdf['GRU_area'] = gru_gdf.geometry.area
+            
         gru_gdf['HRU_area'] = gru_gdf['GRU_area']
         gru_gdf['HRU_ID'] = gru_gdf['GRU_ID']        
+        # Reproject back to WGS84 for downstream compatibility
+        
+        if gru_gdf.crs != "EPSG:4326":
+            self.logger.info("Reprojecting GRU GeoDataFrame back to EPSG:4326 for output.")
+            gru_gdf = gru_gdf.to_crs("EPSG:4326")
 
         gru_gdf.to_file(hru_output_shapefile)
         self.logger.info(f"GRUs saved as HRUs to {hru_output_shapefile}")
@@ -1662,4 +1681,4 @@ class DomainDiscretizer:
         if self.config.get(f'{file_type}') == 'default':
             return self.project_dir / file_def_path / file_name
         else:
-            return Path(self.config.get(f'{file_type}'))
+            return Path(self.config.get(f'{file_type}')) / file_name

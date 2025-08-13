@@ -7,8 +7,8 @@ from typing import Dict, Any
 # Model preprocessors
 from utils.models.summa_utils import SummaPreProcessor # type: ignore
 from utils.models.fuse_utils import FUSEPreProcessor # type: ignore
-from utils.models.gr_utils import GRPreProcessor # type: ignore
-from utils.models.hype_utils import HYPEPreProcessor # type: ignore
+#from utils.models.gr_utils import GRPreProcessor # type: ignore
+#from utils.models.hype_utils import HYPEPreProcessor # type: ignore
 from utils.models.flash_utils import FLASH # type: ignore
 from utils.models.mizuroute_utils import MizuRoutePreProcessor # type: ignore
 #from utils.models.mesh_utils import MESHPreProcessor # type: ignore
@@ -16,7 +16,7 @@ from utils.models.mizuroute_utils import MizuRoutePreProcessor # type: ignore
 # Model runners
 from utils.models.summa_utils import SummaRunner # type: ignore
 from utils.models.fuse_utils import FUSERunner # type: ignore
-from utils.models.gr_utils import GRRunner # type: ignore
+#from utils.models.gr_utils import GRRunner # type: ignore
 from utils.models.hype_utils import HYPERunner # type: ignore
 from utils.models.flash_utils import FLASH # type: ignore
 from utils.models.mizuroute_utils import MizuRouteRunner # type: ignore
@@ -25,7 +25,7 @@ from utils.models.mizuroute_utils import MizuRouteRunner # type: ignore
 # Model postprocessors
 from utils.models.summa_utils import SUMMAPostprocessor # type: ignore
 from utils.models.fuse_utils import FUSEPostprocessor # type: ignore
-from utils.models.gr_utils import GRPostprocessor # type: ignore
+#from utils.models.gr_utils import GRPostprocessor # type: ignore
 from utils.models.hype_utils import HYPEPostProcessor # type: ignore
 from utils.models.flash_utils import FLASHPostProcessor # type: ignore
 #from utils.models.mesh_utils import MESHPostProcessor # type: ignore
@@ -106,8 +106,8 @@ class ModelManager:
         self.preprocessors = {
             'SUMMA': SummaPreProcessor,
             'FUSE': FUSEPreProcessor,
-            'GR': GRPreProcessor,
-            'HYPE': HYPEPreProcessor,
+            #'GR': GRPreProcessor,
+            #'HYPE': HYPEPreProcessor,
             'FLASH': None,  # FLASH doesn't have a separate preprocessor
             'MESH': None,  # MESHPreProcessor (commented out)
         }
@@ -116,8 +116,8 @@ class ModelManager:
         self.runners = {
             'SUMMA': SummaRunner,
             'FUSE': FUSERunner,
-            'GR': GRRunner,
-            'HYPE': HYPERunner,
+            #'GR': GRRunner,
+            #'HYPE': HYPERunner,
             'FLASH': FLASH,
             'MESH': None,  # MESHRunner (commented out)
         }
@@ -126,8 +126,8 @@ class ModelManager:
         self.postprocessors = {
             'SUMMA': SUMMAPostprocessor,
             'FUSE': FUSEPostprocessor,
-            'GR': GRPostprocessor,
-            'HYPE': HYPEPostProcessor,
+            #'GR': GRPostprocessor,
+            #'HYPE': HYPEPostProcessor,
             'FLASH': FLASHPostProcessor,
             'MESH': None,  # MESHPostProcessor (commented out)
         }
@@ -136,8 +136,8 @@ class ModelManager:
         self.runner_methods = {
             'SUMMA': 'run_summa',
             'FUSE': 'run_fuse',
-            'GR': 'run_gr',
-            'HYPE': 'run_hype',
+            #'GR': 'run_gr',
+            #'HYPE': 'run_hype',
             'FLASH': 'run_flash',
             'MESH': 'run_MESH',
         }
